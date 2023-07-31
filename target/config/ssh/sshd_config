@@ -1,0 +1,6 @@
+HostKey /root/.ssh/host_key/ssh_host_rsa_key
+
+AuthorizedKeysFile      /root/.ssh/authorized_keys
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no

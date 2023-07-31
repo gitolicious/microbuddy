@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  source:
+    image: microbuddy-source
+    container_name: microbuddy-source
+    ports:
+      - 9994:9993
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN     # Required to modify network interfaces (needed by ZeroTier)
+      - SYS_ADMIN     # Required for Alpine images
+    devices:
+      - /dev/net/tun  # Required for ZeroTier to work with the network interface
+      - /dev/fuse     # Required for on-the-fly encryption on Fuse file system
+    environment:
+      - NETWORK_ID=YOURNETWORKID       # ZeroTier network ID
+      - TARGET_IP=YOURTARGETIP         # target IP on ZeroTier (will be known after initial connection)
+      - BACKUP_CRON=0 * * * *          # every hour
+      - BACKUP_MASTERPASSWORD=CHANGEME # encryption password
+    volumes:
+      - ./source/auth/zerotier/:/var/lib/zerotier-one/
+      - ./source/auth/ssh/:/root/.ssh/
+      - ./source/scripts/:/scripts/
+      # folders to back up
+      - ./source/data/:/var/lib/microbuddy/data/
+
+  target:
+    image: microbuddy-target
+    container_name: microbuddy-target
+    ports:
+      - 9993:9993
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN     # Required to modify network interfaces (needed by ZeroTier)
+      - SYS_ADMIN     # Required for network access on Alpine images
+    devices:
+      - /dev/net/tun  # Required for ZeroTier to work with the network interface
+    environment:
+      - NETWORK_ID=YOURNETWORKID       # ZeroTier network ID
+      # public key of source, printed on start of source container
+      - SSH_AUTHORIZED_KEY=ssh-rsa averylongkey root@randomstring
+    volumes:
+      # named or host volume for persistent backup data
+      - microbuddy_target_backup_data:/var/lib/microbuddy/backups/
+      #- /var/lib/microbuddy/backup_data/:/var/lib/microbuddy/backups/
+      # persist ZeroTier auth across container restarts
+      - microbuddy_target_zerotier_auth:/var/lib/zerotier-one/
+      # persist SSH key across container restarts
+      - microbuddy_target_ssh_auth:/root/.ssh/host_key/
+
+volumes:
+  microbuddy_target_backup_data:
+  microbuddy_target_zerotier_auth:
+  microbuddy_target_ssh_auth:

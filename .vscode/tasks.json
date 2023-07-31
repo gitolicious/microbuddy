@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "0 ⛲ build source",
+            "type": "shell",
+            "command": "docker build -t microbuddy-source -f source/Dockerfile source/"
+        },
+        {
+            "label": "0 🎯 build target",
+            "type": "shell",
+            "command": "docker build -t microbuddy-target -f target/Dockerfile target/"
+        },
+        {
+            "label": "1 ⬆️ up",
+            "type": "shell",
+            "command": "docker compose up -d"
+        },
+        {
+            "label": "2 ☠️ down",
+            "type": "shell",
+            "command": "docker compose down"
+        },
+        {
+            "label": "3 🧹 cleanup",
+            "type": "shell",
+            "command": "sudo rm -rf source/auth/ssh/* source/auth/zerotier/* target/auth/ssh/host_key/* target/auth/zerotier/ target/data/*"
+        },
+    ]
+}
