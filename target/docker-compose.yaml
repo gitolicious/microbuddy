@@ -1,30 +1,6 @@
 version: '3.8'
 
 services:
-  source:
-    image: microbuddy-source
-    container_name: microbuddy-source
-    ports:
-      - 9994:9993
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN     # Required to modify network interfaces (needed by ZeroTier)
-      - SYS_ADMIN     # Required for Alpine images
-    devices:
-      - /dev/net/tun  # Required for ZeroTier to work with the network interface
-      - /dev/fuse     # Required for on-the-fly encryption on Fuse file system
-    environment:
-      - NETWORK_ID=YOURNETWORKID       # ZeroTier network ID
-      - TARGET_IP=YOURTARGETIP         # target IP on ZeroTier (will be known after initial connection)
-      - BACKUP_CRON=0 * * * *          # every hour
-      - BACKUP_MASTERPASSWORD=CHANGEME # encryption password
-    volumes:
-      - ./source/auth/zerotier/:/var/lib/zerotier-one/
-      - ./source/auth/ssh/:/root/.ssh/
-      - ./source/scripts/:/scripts/
-      # folders to back up
-      - ./source/data/:/var/lib/microbuddy/data/
-
   target:
     image: microbuddy-target
     container_name: microbuddy-target
