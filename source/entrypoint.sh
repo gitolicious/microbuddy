@@ -26,7 +26,7 @@ echo "ZeroTier status:"
 zerotier-cli status
 zerotier-cli listnetworks
 
-if [ ! -f ~/.ssh/known_hosts ]; then
+if [ ! -f ~/.ssh/known_hosts ] || ! ssh-keygen -F ${TARGET_IP} > /dev/null ; then
     echo "Importing SSH host key of target"
     ssh-keyscan -H ${TARGET_IP} >> ~/.ssh/known_hosts
 fi
