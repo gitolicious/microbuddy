@@ -16,12 +16,12 @@
         {
             "label": "1 ⬆️ up",
             "type": "shell",
-            "command": "docker compose up -d"
+            "command": "docker compose -f source/docker-compose.yaml -f target/docker-compose.yaml up -d"
         },
         {
             "label": "2 ☠️ down",
             "type": "shell",
-            "command": "docker compose down"
+            "command": "docker compose -f source/docker-compose.yaml -f target/docker-compose.yaml down"
         },
         {
             "label": "3 🧹 cleanup",
