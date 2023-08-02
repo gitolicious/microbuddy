@@ -10,7 +10,7 @@ RUN <<EOF
         rsync
 EOF
 
-COPY scripts/ .
+COPY scripts/ scripts
 
 COPY entrypoint.sh .
 

@@ -21,6 +21,5 @@ services:
     volumes:
       - ./auth/zerotier/:/var/lib/zerotier-one/
       - ./auth/ssh/:/root/.ssh/
-      - ./scripts/:/scripts/
       # folders to back up
       - ./data/:/var/lib/microbuddy/data/
