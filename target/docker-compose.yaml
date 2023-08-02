@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   target:
-    image: microbuddy-target
+    image: 3q83irevj30iv1h/microbuddy-target
     container_name: microbuddy-target
     ports:
       - 9993:9993
